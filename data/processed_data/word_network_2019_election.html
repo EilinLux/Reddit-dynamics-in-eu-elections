@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: white;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "grey", "font": {"color": "black"}, "id": "election", "label": "election", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "european election", "label": "european election", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "candidate", "label": "candidate", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "government", "label": "government", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "country", "label": "country", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "national", "label": "national", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "voting", "label": "voting", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "european", "label": "european", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "official", "label": "official", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "link", "label": "link", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "may", "label": "may", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "europe", "label": "europe", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "change", "label": "change", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "right", "label": "right", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "party", "label": "party", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "point", "label": "point", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "one", "label": "one", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "however", "label": "however", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "parliament", "label": "parliament", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "like", "label": "like", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "system", "label": "system", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "know", "label": "know", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "need", "label": "need", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "first", "label": "first", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "going", "label": "going", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "part", "label": "part", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "even", "label": "even", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "state", "label": "state", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "also", "label": "also", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "independent", "label": "independent", "shape": "dot", "size": 10}, {"color": "skyblue", "font": {"color": "black"}, "id": "future", "label": "future", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"from": "election", "to": "european election", "width": 0.9999966621398926}, {"from": "election", "to": "candidate", "width": 0.9999954104423523}, {"from": "election", "to": "government", "width": 0.9999953508377075}, {"from": "election", "to": "country", "width": 0.9999949336051941}, {"from": "election", "to": "national", "width": 0.999994695186615}, {"from": "election", "to": "voting", "width": 0.9999942779541016}, {"from": "election", "to": "european", "width": 0.9999932050704956}, {"from": "election", "to": "official", "width": 0.9999924302101135}, {"from": "election", "to": "link", "width": 0.9999923706054688}, {"from": "election", "to": "may", "width": 0.9999921917915344}, {"from": "election", "to": "europe", "width": 0.9999921917915344}, {"from": "election", "to": "change", "width": 0.9999920129776001}, {"from": "election", "to": "right", "width": 0.9999919533729553}, {"from": "election", "to": "party", "width": 0.9999919533729553}, {"from": "election", "to": "point", "width": 0.9999918937683105}, {"from": "election", "to": "one", "width": 0.9999917149543762}, {"from": "election", "to": "however", "width": 0.9999917149543762}, {"from": "election", "to": "parliament", "width": 0.9999916553497314}, {"from": "election", "to": "like", "width": 0.9999915361404419}, {"from": "election", "to": "system", "width": 0.9999915361404419}, {"from": "election", "to": "know", "width": 0.9999914765357971}, {"from": "election", "to": "need", "width": 0.9999914765357971}, {"from": "election", "to": "first", "width": 0.9999914169311523}, {"from": "election", "to": "going", "width": 0.9999912977218628}, {"from": "election", "to": "part", "width": 0.999991238117218}, {"from": "election", "to": "even", "width": 0.999991238117218}, {"from": "election", "to": "state", "width": 0.999991238117218}, {"from": "election", "to": "also", "width": 0.999991238117218}, {"from": "election", "to": "independent", "width": 0.9999911189079285}, {"from": "election", "to": "future", "width": 0.9999911189079285}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

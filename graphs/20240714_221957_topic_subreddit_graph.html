@@ -1,0 +1,192 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: white;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#1f77b4", "font": {"color": "black"}, "id": "Topic 1", "label": "Topic 1", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "left", "label": "left", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "still", "label": "still", "shape": "dot", "size": 10}, {"color": "#7f7f7f", "font": {"color": "black"}, "id": "germany", "label": "germany", "shape": "box", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "many", "label": "many", "shape": "dot", "size": 10}, {"color": "#9edae5", "font": {"color": "black"}, "id": "politics", "label": "politics", "shape": "box", "size": 10}, {"color": "#8c564b", "font": {"color": "black"}, "id": "europe", "label": "europe", "shape": "box", "size": 10}, {"color": "#c7c7c7", "font": {"color": "black"}, "id": "ukpolitics", "label": "ukpolitics", "shape": "box", "size": 10}, {"color": "#17becf", "font": {"color": "black"}, "id": "Disinfo", "label": "Disinfo", "shape": "box", "size": 10}, {"color": "#c49c94", "font": {"color": "black"}, "id": "worldnews", "label": "worldnews", "shape": "box", "size": 10}, {"color": "#17becf", "font": {"color": "black"}, "id": "unitedkingdom", "label": "unitedkingdom", "shape": "box", "size": 10}, {"color": "#8c564b", "font": {"color": "black"}, "id": "europeanunion", "label": "europeanunion", "shape": "box", "size": 10}, {"color": "#dbdb8d", "font": {"color": "black"}, "id": "LabourUK", "label": "LabourUK", "shape": "box", "size": 10}, {"color": "#c7c7c7", "font": {"color": "black"}, "id": "Conservative", "label": "Conservative", "shape": "box", "size": 10}, {"color": "#bcbd22", "font": {"color": "black"}, "id": "conspiracy", "label": "conspiracy", "shape": "box", "size": 10}, {"color": "#9edae5", "font": {"color": "black"}, "id": "brexit", "label": "brexit", "shape": "box", "size": 10}, {"color": "#f7b6d2", "font": {"color": "black"}, "id": "imaginaryelections", "label": "imaginaryelections", "shape": "box", "size": 10}, {"color": "#c49c94", "font": {"color": "black"}, "id": "EuropeanFederalists", "label": "EuropeanFederalists", "shape": "box", "size": 10}, {"color": "#7f7f7f", "font": {"color": "black"}, "id": "eu", "label": "eu", "shape": "box", "size": 10}, {"color": "#8c564b", "font": {"color": "black"}, "id": "ireland", "label": "ireland", "shape": "box", "size": 10}, {"color": "#dbdb8d", "font": {"color": "black"}, "id": "Scotland", "label": "Scotland", "shape": "box", "size": 10}, {"color": "#e377c2", "font": {"color": "black"}, "id": "neoliberal", "label": "neoliberal", "shape": "box", "size": 10}, {"color": "#f7b6d2", "font": {"color": "black"}, "id": "AskEurope", "label": "AskEurope", "shape": "box", "size": 10}, {"color": "#e377c2", "font": {"color": "black"}, "id": "anime_titties", "label": "anime_titties", "shape": "box", "size": 10}, {"color": "#e377c2", "font": {"color": "black"}, "id": "YUROP", "label": "YUROP", "shape": "box", "size": 10}, {"color": "#f7b6d2", "font": {"color": "black"}, "id": "MapPorn", "label": "MapPorn", "shape": "box", "size": 10}, {"color": "#f7b6d2", "font": {"color": "black"}, "id": "cyprus", "label": "cyprus", "shape": "box", "size": 10}, {"color": "#c7c7c7", "font": {"color": "black"}, "id": "technology", "label": "technology", "shape": "box", "size": 10}, {"color": "#c7c7c7", "font": {"color": "black"}, "id": "dataisbeautiful", "label": "dataisbeautiful", "shape": "box", "size": 10}, {"color": "#8c564b", "font": {"color": "black"}, "id": "europes", "label": "europes", "shape": "box", "size": 10}, {"color": "#7f7f7f", "font": {"color": "black"}, "id": "socialism", "label": "socialism", "shape": "box", "size": 10}, {"color": "#c49c94", "font": {"color": "black"}, "id": "EUnews", "label": "EUnews", "shape": "box", "size": 10}, {"color": "#17becf", "font": {"color": "black"}, "id": "LibDem", "label": "LibDem", "shape": "box", "size": 10}, {"color": "#c49c94", "font": {"color": "black"}, "id": "europeanparliament", "label": "europeanparliament", "shape": "box", "size": 10}, {"color": "#e377c2", "font": {"color": "black"}, "id": "2westerneurope4u", "label": "2westerneurope4u", "shape": "box", "size": 10}, {"color": "#9edae5", "font": {"color": "black"}, "id": "tories", "label": "tories", "shape": "box", "size": 10}, {"color": "#8c564b", "font": {"color": "black"}, "id": "irishpolitics", "label": "irishpolitics", "shape": "box", "size": 10}, {"color": "#bcbd22", "font": {"color": "black"}, "id": "Destiny", "label": "Destiny", "shape": "box", "size": 10}, {"color": "#dbdb8d", "font": {"color": "black"}, "id": "armenia", "label": "armenia", "shape": "box", "size": 10}, {"color": "#e377c2", "font": {"color": "black"}, "id": "VoltEuropa", "label": "VoltEuropa", "shape": "box", "size": 10}, {"color": "#c7c7c7", "font": {"color": "black"}, "id": "AskBalkans", "label": "AskBalkans", "shape": "box", "size": 10}, {"color": "#bcbd22", "font": {"color": "black"}, "id": "YAPms", "label": "YAPms", "shape": "box", "size": 10}, {"color": "#dbdb8d", "font": {"color": "black"}, "id": "hungary", "label": "hungary", "shape": "box", "size": 10}, {"color": "#9edae5", "font": {"color": "black"}, "id": "bristol", "label": "bristol", "shape": "box", "size": 10}, {"color": "#7f7f7f", "font": {"color": "black"}, "id": "Luxembourg", "label": "Luxembourg", "shape": "box", "size": 10}, {"color": "#dbdb8d", "font": {"color": "black"}, "id": "EuropeanArmy", "label": "EuropeanArmy", "shape": "box", "size": 10}, {"color": "#9edae5", "font": {"color": "black"}, "id": "PropagandaPosters", "label": "PropagandaPosters", "shape": "box", "size": 10}, {"color": "#bcbd22", "font": {"color": "black"}, "id": "Gotterfunken", "label": "Gotterfunken", "shape": "box", "size": 10}, {"color": "#17becf", "font": {"color": "black"}, "id": "CanadaPolitics", "label": "CanadaPolitics", "shape": "box", "size": 10}, {"color": "#d62728", "font": {"color": "black"}, "id": "Topic 2", "label": "Topic 2", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "russia", "label": "russia", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "state", "label": "state", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "back", "label": "back", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "ukraine", "label": "ukraine", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "yes", "label": "yes", "shape": "dot", "size": 10}, {"color": "#f7b6d2", "font": {"color": "black"}, "id": "Topic 3", "label": "Topic 3", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "far_right", "label": "far_right", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "afd", "label": "afd", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "volt", "label": "volt", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "yeah", "label": "yeah", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "candidates", "label": "candidates", "shape": "dot", "size": 10}, {"color": "#9edae5", "font": {"color": "black"}, "id": "Topic 4", "label": "Topic 4", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "right", "label": "right", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "way", "label": "way", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "see", "label": "see", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "good", "label": "good", "shape": "dot", "size": 10}, {"color": "gray", "font": {"color": "black"}, "id": "time", "label": "time", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"from": "Topic 1", "to": "left", "width": 1}, {"from": "Topic 1", "to": "still", "width": 1}, {"from": "Topic 1", "to": "germany", "width": 5.434879124164581}, {"from": "Topic 1", "to": "many", "width": 1}, {"from": "Topic 1", "to": "politics", "width": 0.10212236642837524}, {"from": "Topic 1", "to": "europe", "width": 51.79465966951102}, {"from": "Topic 1", "to": "ukpolitics", "width": 3.0221584737300873}, {"from": "Topic 1", "to": "Disinfo", "width": 0.1340349279344082}, {"from": "Topic 1", "to": "worldnews", "width": 13.23449014313519}, {"from": "Topic 1", "to": "unitedkingdom", "width": 0.3985377103090286}, {"from": "Topic 1", "to": "europeanunion", "width": 48.82666138280183}, {"from": "Topic 1", "to": "LabourUK", "width": 1.6034353971481323}, {"from": "Topic 1", "to": "Conservative", "width": 3.655363153666258}, {"from": "Topic 1", "to": "conspiracy", "width": 1.2772404104471207}, {"from": "Topic 1", "to": "brexit", "width": 0.22384750843048096}, {"from": "Topic 1", "to": "imaginaryelections", "width": 7.584954686462879}, {"from": "Topic 1", "to": "EuropeanFederalists", "width": 15.29934237524867}, {"from": "Topic 1", "to": "eu", "width": 4.690515831112862}, {"from": "Topic 1", "to": "ireland", "width": 13.690439142286777}, {"from": "Topic 1", "to": "Scotland", "width": 0.8032206073403358}, {"from": "Topic 1", "to": "neoliberal", "width": 11.158553848043084}, {"from": "Topic 1", "to": "AskEurope", "width": 7.2144181951880455}, {"from": "Topic 1", "to": "anime_titties", "width": 10.076815944164991}, {"from": "Topic 1", "to": "YUROP", "width": 12.042709378525615}, {"from": "Topic 1", "to": "MapPorn", "width": 8.48580478131771}, {"from": "Topic 1", "to": "cyprus", "width": 7.411566838622093}, {"from": "Topic 1", "to": "technology", "width": 1.510286457836628}, {"from": "Topic 1", "to": "dataisbeautiful", "width": 2.436602860689163}, {"from": "Topic 1", "to": "europes", "width": 23.36179388873279}, {"from": "Topic 1", "to": "socialism", "width": 1.782783712260425}, {"from": "Topic 1", "to": "EUnews", "width": 19.15924109891057}, {"from": "Topic 1", "to": "LibDem", "width": 0.8901223242282867}, {"from": "Topic 1", "to": "europeanparliament", "width": 15.849313027225435}, {"from": "Topic 1", "to": "2westerneurope4u", "width": 9.06615682784468}, {"from": "Topic 1", "to": "tories", "width": 0.23905621469020844}, {"from": "Topic 1", "to": "irishpolitics", "width": 19.14322693273425}, {"from": "Topic 1", "to": "Destiny", "width": 1.7631126046180725}, {"from": "Topic 1", "to": "armenia", "width": 1.1347021535038948}, {"from": "Topic 1", "to": "VoltEuropa", "width": 6.526305140927434}, {"from": "Topic 1", "to": "AskBalkans", "width": 2.1340065747499466}, {"from": "Topic 1", "to": "YAPms", "width": 2.4975022673606873}, {"from": "Topic 1", "to": "hungary", "width": 1.47343710064888}, {"from": "Topic 1", "to": "bristol", "width": 0.13046373426914215}, {"from": "Topic 1", "to": "Luxembourg", "width": 3.3653423376381397}, {"from": "Topic 1", "to": "EuropeanArmy", "width": 0.657248005270958}, {"from": "Topic 1", "to": "PropagandaPosters", "width": 0.2546820044517517}, {"from": "Topic 1", "to": "Gotterfunken", "width": 3.7659230791032314}, {"from": "Topic 1", "to": "CanadaPolitics", "width": 0.2903859317302704}, {"from": "Topic 2", "to": "russia", "width": 1}, {"from": "Topic 2", "to": "state", "width": 1}, {"from": "Topic 2", "to": "back", "width": 1}, {"from": "Topic 2", "to": "ukraine", "width": 1}, {"from": "Topic 2", "to": "yes", "width": 1}, {"from": "Topic 2", "to": "europe", "width": 50.60667024925351}, {"from": "Topic 2", "to": "ukpolitics", "width": 1.7366545125842094}, {"from": "Topic 2", "to": "Disinfo", "width": 2.2949928641319275}, {"from": "Topic 2", "to": "worldnews", "width": 18.728639310225844}, {"from": "Topic 2", "to": "unitedkingdom", "width": 0.7128981798887253}, {"from": "Topic 2", "to": "europeanunion", "width": 49.92664141021669}, {"from": "Topic 2", "to": "LabourUK", "width": 1.5107738748192787}, {"from": "Topic 2", "to": "politics", "width": 0.4236808121204376}, {"from": "Topic 2", "to": "Conservative", "width": 1.9524620613083243}, {"from": "Topic 2", "to": "conspiracy", "width": 2.703132301568985}, {"from": "Topic 2", "to": "brexit", "width": 0.35937339067459106}, {"from": "Topic 2", "to": "imaginaryelections", "width": 3.3063401505351067}, {"from": "Topic 2", "to": "EuropeanFederalists", "width": 17.116536427289248}, {"from": "Topic 2", "to": "eu", "width": 2.867756061255932}, {"from": "Topic 2", "to": "ireland", "width": 20.634204225614667}, {"from": "Topic 2", "to": "Scotland", "width": 1.7246645241975784}, {"from": "Topic 2", "to": "neoliberal", "width": 8.568138091824949}, {"from": "Topic 2", "to": "AskEurope", "width": 5.872540222480893}, {"from": "Topic 2", "to": "anime_titties", "width": 12.49227948486805}, {"from": "Topic 2", "to": "YUROP", "width": 13.73834002763033}, {"from": "Topic 2", "to": "MapPorn", "width": 7.316369862295687}, {"from": "Topic 2", "to": "cyprus", "width": 9.968905359506607}, {"from": "Topic 2", "to": "technology", "width": 2.4993429481983185}, {"from": "Topic 2", "to": "dataisbeautiful", "width": 1.955198995769024}, {"from": "Topic 2", "to": "europes", "width": 15.02992495521903}, {"from": "Topic 2", "to": "socialism", "width": 4.347304552793503}, {"from": "Topic 2", "to": "EUnews", "width": 19.41321044974029}, {"from": "Topic 2", "to": "LibDem", "width": 0.2804722897708416}, {"from": "Topic 2", "to": "europeanparliament", "width": 13.46042868308723}, {"from": "Topic 2", "to": "2westerneurope4u", "width": 11.612810254096985}, {"from": "Topic 2", "to": "tories", "width": 0.291077196598053}, {"from": "Topic 2", "to": "irishpolitics", "width": 18.770695507526398}, {"from": "Topic 2", "to": "Destiny", "width": 1.3733215183019638}, {"from": "Topic 2", "to": "armenia", "width": 1.3075522184371948}, {"from": "Topic 2", "to": "VoltEuropa", "width": 5.2891072407364845}, {"from": "Topic 2", "to": "AskBalkans", "width": 2.7261247411370277}, {"from": "Topic 2", "to": "YAPms", "width": 1.1460623182356358}, {"from": "Topic 2", "to": "hungary", "width": 0.9951060973107815}, {"from": "Topic 2", "to": "bristol", "width": 0.299009770154953}, {"from": "Topic 2", "to": "Luxembourg", "width": 4.089635115116835}, {"from": "Topic 2", "to": "germany", "width": 4.328492611646652}, {"from": "Topic 2", "to": "EuropeanArmy", "width": 1.446928434073925}, {"from": "Topic 2", "to": "PropagandaPosters", "width": 0.3304618299007416}, {"from": "Topic 2", "to": "Gotterfunken", "width": 2.252357918769121}, {"from": "Topic 2", "to": "CanadaPolitics", "width": 0.15169595181941986}, {"from": "Topic 3", "to": "far_right", "width": 1}, {"from": "Topic 3", "to": "afd", "width": 1}, {"from": "Topic 3", "to": "volt", "width": 1}, {"from": "Topic 3", "to": "yeah", "width": 1}, {"from": "Topic 3", "to": "candidates", "width": 1}, {"from": "Topic 3", "to": "europe", "width": 32.713993238285184}, {"from": "Topic 3", "to": "ukpolitics", "width": 1.0912098437547684}, {"from": "Topic 3", "to": "Disinfo", "width": 0.3061903603374958}, {"from": "Topic 3", "to": "worldnews", "width": 8.248287389054894}, {"from": "Topic 3", "to": "unitedkingdom", "width": 0.19687046110630035}, {"from": "Topic 3", "to": "europeanunion", "width": 35.08816638495773}, {"from": "Topic 3", "to": "LabourUK", "width": 0.5455718487501144}, {"from": "Topic 3", "to": "politics", "width": 0.14980094134807587}, {"from": "Topic 3", "to": "Conservative", "width": 1.2063767574727535}, {"from": "Topic 3", "to": "conspiracy", "width": 0.9459202140569687}, {"from": "Topic 3", "to": "brexit", "width": 0.05608547106385231}, {"from": "Topic 3", "to": "imaginaryelections", "width": 3.908707469701767}, {"from": "Topic 3", "to": "EuropeanFederalists", "width": 7.7004857594147325}, {"from": "Topic 3", "to": "eu", "width": 1.3686836054548621}, {"from": "Topic 3", "to": "ireland", "width": 9.916733920574188}, {"from": "Topic 3", "to": "Scotland", "width": 0.3661915324628353}, {"from": "Topic 3", "to": "neoliberal", "width": 4.952955179847777}, {"from": "Topic 3", "to": "AskEurope", "width": 4.3927512019872665}, {"from": "Topic 3", "to": "anime_titties", "width": 4.873344868421555}, {"from": "Topic 3", "to": "YUROP", "width": 7.88751778844744}, {"from": "Topic 3", "to": "MapPorn", "width": 5.358694285154343}, {"from": "Topic 3", "to": "cyprus", "width": 3.367976624518633}, {"from": "Topic 3", "to": "technology", "width": 1.5260499957948923}, {"from": "Topic 3", "to": "dataisbeautiful", "width": 1.83657006919384}, {"from": "Topic 3", "to": "europes", "width": 12.021117453463376}, {"from": "Topic 3", "to": "socialism", "width": 0.8980190679430962}, {"from": "Topic 3", "to": "EUnews", "width": 8.390595730394125}, {"from": "Topic 3", "to": "LibDem", "width": 0.15448787808418274}, {"from": "Topic 3", "to": "europeanparliament", "width": 8.733450984582305}, {"from": "Topic 3", "to": "2westerneurope4u", "width": 6.913780327886343}, {"from": "Topic 3", "to": "tories", "width": 0.018498113378882408}, {"from": "Topic 3", "to": "irishpolitics", "width": 10.25789926853031}, {"from": "Topic 3", "to": "Destiny", "width": 1.196317583322525}, {"from": "Topic 3", "to": "armenia", "width": 0.7521796450018883}, {"from": "Topic 3", "to": "VoltEuropa", "width": 11.94076481461525}, {"from": "Topic 3", "to": "AskBalkans", "width": 0.9576635882258415}, {"from": "Topic 3", "to": "YAPms", "width": 1.202917419373989}, {"from": "Topic 3", "to": "hungary", "width": 1.5390403419733047}, {"from": "Topic 3", "to": "bristol", "width": 0.10796181112527847}, {"from": "Topic 3", "to": "Luxembourg", "width": 1.7580886017531157}, {"from": "Topic 3", "to": "germany", "width": 2.081385774537921}, {"from": "Topic 3", "to": "EuropeanArmy", "width": 0.4187237396836281}, {"from": "Topic 3", "to": "PropagandaPosters", "width": 0.25552940368652344}, {"from": "Topic 3", "to": "Gotterfunken", "width": 1.053457822650671}, {"from": "Topic 3", "to": "CanadaPolitics", "width": 0.20796938240528107}, {"from": "Topic 4", "to": "right", "width": 1}, {"from": "Topic 4", "to": "way", "width": 1}, {"from": "Topic 4", "to": "see", "width": 1}, {"from": "Topic 4", "to": "good", "width": 1}, {"from": "Topic 4", "to": "time", "width": 1}, {"from": "Topic 4", "to": "europe", "width": 46.803643403574824}, {"from": "Topic 4", "to": "ukpolitics", "width": 3.1499771177768707}, {"from": "Topic 4", "to": "Disinfo", "width": 0.2574364021420479}, {"from": "Topic 4", "to": "worldnews", "width": 11.709185095503926}, {"from": "Topic 4", "to": "unitedkingdom", "width": 0.6916935741901398}, {"from": "Topic 4", "to": "europeanunion", "width": 35.13347156625241}, {"from": "Topic 4", "to": "LabourUK", "width": 1.3273170292377472}, {"from": "Topic 4", "to": "politics", "width": 0.32439589500427246}, {"from": "Topic 4", "to": "Conservative", "width": 2.17818595841527}, {"from": "Topic 4", "to": "conspiracy", "width": 2.0642001181840897}, {"from": "Topic 4", "to": "brexit", "width": 0.36069363355636597}, {"from": "Topic 4", "to": "imaginaryelections", "width": 3.17078685387969}, {"from": "Topic 4", "to": "EuropeanFederalists", "width": 13.840546552091837}, {"from": "Topic 4", "to": "eu", "width": 2.073044292628765}, {"from": "Topic 4", "to": "ireland", "width": 20.734367698431015}, {"from": "Topic 4", "to": "Scotland", "width": 1.10592320561409}, {"from": "Topic 4", "to": "neoliberal", "width": 5.272380361333489}, {"from": "Topic 4", "to": "AskEurope", "width": 7.517215348780155}, {"from": "Topic 4", "to": "anime_titties", "width": 8.551590530201793}, {"from": "Topic 4", "to": "YUROP", "width": 11.309781149961054}, {"from": "Topic 4", "to": "MapPorn", "width": 5.839131077751517}, {"from": "Topic 4", "to": "cyprus", "width": 6.2327050268650055}, {"from": "Topic 4", "to": "technology", "width": 4.441821021959186}, {"from": "Topic 4", "to": "dataisbeautiful", "width": 2.7650795988738537}, {"from": "Topic 4", "to": "europes", "width": 11.553317136131227}, {"from": "Topic 4", "to": "socialism", "width": 2.9634778201580048}, {"from": "Topic 4", "to": "EUnews", "width": 12.027802418917418}, {"from": "Topic 4", "to": "LibDem", "width": 0.674917459487915}, {"from": "Topic 4", "to": "europeanparliament", "width": 20.94701004214585}, {"from": "Topic 4", "to": "2westerneurope4u", "width": 11.398293025791645}, {"from": "Topic 4", "to": "tories", "width": 0.4513684809207916}, {"from": "Topic 4", "to": "irishpolitics", "width": 25.7988247750327}, {"from": "Topic 4", "to": "Destiny", "width": 1.6672484278678894}, {"from": "Topic 4", "to": "armenia", "width": 0.8055659234523773}, {"from": "Topic 4", "to": "VoltEuropa", "width": 6.23750020749867}, {"from": "Topic 4", "to": "AskBalkans", "width": 2.182204931974411}, {"from": "Topic 4", "to": "YAPms", "width": 1.1433328986167908}, {"from": "Topic 4", "to": "hungary", "width": 0.9924163669347763}, {"from": "Topic 4", "to": "bristol", "width": 0.46256470680236816}, {"from": "Topic 4", "to": "Luxembourg", "width": 4.777385666966438}, {"from": "Topic 4", "to": "germany", "width": 2.1211991012096405}, {"from": "Topic 4", "to": "EuropeanArmy", "width": 0.47709977999329567}, {"from": "Topic 4", "to": "PropagandaPosters", "width": 0.15932676196098328}, {"from": "Topic 4", "to": "Gotterfunken", "width": 0.9282610900700092}, {"from": "Topic 4", "to": "CanadaPolitics", "width": 0.3499487340450287}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 1,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -10,
+            "springConstant": 0.08,
+            "springLength": 200
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
